@@ -12,7 +12,7 @@ export default function Home() {
   const [wordsList, setWordsList] = useState<string>(
     generate({ exactly: wordCount, join: " " })
   );
-  const { setTypingCursorPosition } = useWordsStore();
+  const { setCaretPosition: setTypingCursorPosition } = useWordsStore();
 
   useEffect(() => {
     setWordsList(generate({ exactly: wordCount, join: " " }));
@@ -24,15 +24,15 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen w-fit items-center justify-center flex flex-col">
-      <div className="flex gap-x-4 rounded-md bg-secondary text-foreground p-4 w-fit mb-10">
-        <label>Word count:</label>
+    <div className="dark bg-primary h-screen w-full items-center justify-center flex flex-col">
+      <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit mb-10">
+        <label className="text-sub">Word count:</label>
         {wordCountList.map((count) => (
           <button
             key={count}
             className={cn(
-              "text-base",
-              count === wordCount && "text-yellow-400"
+              "text-base text-sub hover:text-text transition-colors duration-200 cursor-pointer font-medium",
+              count === wordCount && "text-main"
             )}
             onClick={() => handleWordCountChange(count)}
           >

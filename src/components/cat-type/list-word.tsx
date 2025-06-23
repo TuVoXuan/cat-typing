@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import TypingCursor from "./typing-cursor";
+import Caret from "./caret";
 import Word from "./word";
 import useWordsStore from "@/store/useWords";
 
@@ -32,7 +32,7 @@ export default function ListWords({ wordStr }: ListWordsProps) {
 
   return (
     <div id="word-list" className="flex flex-wrap max-w-[1200px] relative">
-      <TypingCursor />
+      <Caret />
       {words.map((word, index) => (
         <Word key={`${word.word}-${index}`} word={word} index={index} />
       ))}

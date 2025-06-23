@@ -18,8 +18,8 @@ interface WordsState {
   setCurrentWord: (currWord: ICurrentWord) => void;
   wordLetterRefs: IWordLetterRef[];
   setWordLetterRefs: (wordLetterRefs: IWordLetterRef[]) => void;
-  typingCursorPosition: { x: number; y: number } | null;
-  setTypingCursorPosition: (position: { x: number; y: number } | null) => void;
+  caretPosition: { x: number; y: number } | null;
+  setCaretPosition: (position: { x: number; y: number } | null) => void;
   startedTyping: boolean;
   setStartedTyping: (started: boolean) => void;
 }
@@ -31,9 +31,9 @@ const useWordsStore = create<WordsState>()((set) => ({
   setCurrentWord: (currWord) => set({ currentWord: currWord }),
   wordLetterRefs: [],
   setWordLetterRefs: (wordLetterRefs) => set({ wordLetterRefs }),
-  typingCursorPosition: null,
-  setTypingCursorPosition: (position) =>
-    set({ typingCursorPosition: position }),
+  caretPosition: null,
+  setCaretPosition: (position) =>
+    set({ caretPosition: position }),
   startedTyping: false,
   setStartedTyping: (started) => set({ startedTyping: started }),
 }));

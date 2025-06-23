@@ -48,7 +48,14 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
-  --color-flicker: var(--flicker)
+
+  --color-main: var(--main);
+  --color-caret: var(--caret);
+  --color-sub: var(--sub);
+  --color-sub-alt: var(--sub-alt);
+  --color-text: var(--text);
+  --color-error: var(--error);
+  --color-error-extra: var(--error-extra);
 }
 
 :root {
@@ -91,7 +98,14 @@
   --muted: #6b7280;
   --border: #e5e7eb;
   --accent: #3b82f6;
-  --flicker: #ebd621
+
+  --main: #ebd621;
+  --caret: #ebd621;
+  --sub: #646669;
+  --sub-alt: #2c2e31;
+  --text: #d1d0c5;
+  --error: #ca4754;
+  --error-extra: #7e2a33;
 }
 
 .dark {
@@ -127,17 +141,24 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
-  --primary: #1f2937;
+  --primary: #323437;
   --secondary: #111827;
   --foreground: #ffffff;
   --muted: #d1d5db;
   --border: #374151;
+
+  --main: #ebd621;
   --accent: #60a5fa;
-  --flicker: #ebd621
+  --caret: #e2b714;
+  --sub: #646669;
+  --sub-alt: #2c2e31;
+  --text: #d1d0c5;
+  --error: #ca4754;
+  --error-extra: #7e2a33;
 }
 
 @layer utilities {
-  @keyframes flicker {
+  @keyframes caret {
 
     0%,
     100% {
@@ -145,12 +166,12 @@
     }
 
     50% {
-      background-color: var(--color-flicker);
+      background-color: var(--color-caret);
     }
   }
 
-  .animate-flicker {
-    animation: flicker 1s infinite;
+  .animate-caret {
+    animation: caret 1s infinite;
   }
 }
 

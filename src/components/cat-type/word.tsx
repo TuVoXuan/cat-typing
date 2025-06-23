@@ -25,7 +25,7 @@ export default function Word({ word, index, className }: WordProps) {
     words,
     setCurrentWord,
     setWords,
-    setTypingCursorPosition,
+    setCaretPosition,
     startedTyping,
     setStartedTyping,
   } = useWordsStore();
@@ -53,7 +53,7 @@ export default function Word({ word, index, className }: WordProps) {
 
   useEffect(() => {
     if (letterPosition) {
-      setTypingCursorPosition(letterPosition);
+      setCaretPosition(letterPosition);
     }
   }, [letterPosition]);
 
