@@ -1,24 +1,24 @@
+import { Dimension, Position } from "@/types";
 import { useState, useEffect } from "react";
 
 const ADJUSTMENT_TOP_PX = 4;
 
-type Position = {
-  x: number;
-  y: number;
-};
+export type LetterProperties = [Position | null, Dimension | null];
 
-const useRelativePositionById = (
+const useLetterProperties = (
   childId: string,
   parentId: string,
   horizontalPosition: "left" | "right"
-): Position | null => {
+): LetterProperties => {
   const [position, setPosition] = useState<Position | null>(null);
+  const [letterDimensions, setLetterDimensions] = useState<Dimension | null>(null);
 
   useEffect(() => {
     const updatePosition = () => {
       if (!childId) return null;
       const parent = document.getElementById(parentId);
       const child = document.getElementById(childId);
+      console.log("child: ", child);
 
       if (parent && child) {
         const parentRect = parent.getBoundingClientRect();
@@ -29,6 +29,11 @@ const useRelativePositionById = (
             (horizontalPosition === "left" ? childRect.left : childRect.right) -
             parentRect.left,
           y: childRect.top - parentRect.top + ADJUSTMENT_TOP_PX,
+        });
+
+        setLetterDimensions({
+          width: childRect.width,
+          height: childRect.height,
         });
       } else {
         console.warn("Parent or Child element not found by ID");
@@ -42,6 +47,6 @@ const useRelativePositionById = (
     return () => window.removeEventListener("resize", updatePosition);
   }, [childId, parentId, horizontalPosition]);
 
-  return position;
+  return [position, letterDimensions];
 };
-export default useRelativePositionById;
+export default useLetterProperties;

@@ -8,8 +8,9 @@ import {
 } from "@/utils/app-event";
 import useWordsStore, { IWord } from "@/store/useWords";
 import { cn } from "@/lib/utils";
-import useRelativePositionById from "@/hooks/useRelativePositionById";
+import useLetterProperties from "@/hooks/useLetterProperties";
 import { alphabet } from "@/constants";
+import useCaretStore from "@/store/useCaret";
 
 interface WordProps {
   word: IWord;
@@ -25,17 +26,17 @@ export default function Word({ word, index, className }: WordProps) {
     words,
     setCurrentWord,
     setWords,
-    setCaretPosition,
     startedTyping,
     setStartedTyping,
   } = useWordsStore();
+  const {setPosition: setCaretPosition, setDimension: setCaretDimension, style: caretStyle} = useCaretStore();
   const [letters, setLetter] = useState<ILetter[]>([]);
   const [typedLetterId, setTypedLetterId] = useState<string>("");
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
     "left"
   );
   const keyTypedCountRef = useRef<number>(0);
-  const letterPosition = useRelativePositionById(
+  const [letterPosition, letterDimension] = useLetterProperties(
     typedLetterId,
     "word-list",
     cursorPosition
@@ -56,6 +57,15 @@ export default function Word({ word, index, className }: WordProps) {
       setCaretPosition(letterPosition);
     }
   }, [letterPosition]);
+
+  useEffect(() => {
+    if(caretStyle === "block") {
+      setCaretDimension(letterDimension);
+    }
+    else if (caretStyle === "default") {
+      setCaretDimension(null);
+    }
+  }, [letterDimension, caretStyle]);
 
   const isWordTypedCorrectly = useMemo(() => {
     return letters.every(

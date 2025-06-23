@@ -1,22 +1,24 @@
 "use client";
 import ListWords from "@/components/cat-type/list-word";
 import { cn } from "@/lib/utils";
-import useWordsStore from "@/store/useWords";
+import useCaretStore from "@/store/useCaret";
+import { CaretStyle } from "@/types";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
 
 const wordCountList = [10, 25, 50];
+const caretStyles: CaretStyle[] = ['default', 'block', 'underline']
 
 export default function Home() {
   const [wordCount, setWordCount] = useState<number>(wordCountList[1]);
   const [wordsList, setWordsList] = useState<string>(
     generate({ exactly: wordCount, join: " " })
   );
-  const { setCaretPosition: setTypingCursorPosition } = useWordsStore();
+  const {setPosition: setCaretPosition, style: caretStyle, setStyle: setCaretStyle} = useCaretStore();
 
   useEffect(() => {
     setWordsList(generate({ exactly: wordCount, join: " " }));
-    setTypingCursorPosition(null); // Reset cursor position when word count changes
+    setCaretPosition(null); // Reset cursor position when word count changes
   }, [wordCount]);
 
   const handleWordCountChange = (count: number) => {
@@ -37,6 +39,21 @@ export default function Home() {
             onClick={() => handleWordCountChange(count)}
           >
             {count}
+          </button>
+        ))}
+      </div>
+      <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit mb-10">
+        <label className="text-sub">Caret style:</label>
+        {caretStyles.map((style) => (
+          <button
+            key={style}
+            className={cn(
+              "text-base text-sub hover:text-text transition-colors duration-200 cursor-pointer font-medium",
+              caretStyle === style && "text-main"
+            )}
+            onClick={() => setCaretStyle(style)}
+          >
+            {style}
           </button>
         ))}
       </div>

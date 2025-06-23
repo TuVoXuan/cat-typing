@@ -32,7 +32,7 @@ export default function ListWords({ wordStr }: ListWordsProps) {
 
   return (
     <div id="word-list" className="flex flex-wrap max-w-[1200px] relative">
-      <Caret />
+      <Caret style="block"/>
       {words.map((word, index) => (
         <Word key={`${word.word}-${index}`} word={word} index={index} />
       ))}
