@@ -1,20 +1,19 @@
 "use client";
 import ListWords from "@/components/cat-type/list-word";
+import SelectCaretStyle from "@/components/settings/select-caret-style";
 import { cn } from "@/lib/utils";
 import useCaretStore from "@/store/useCaret";
-import { CaretStyle } from "@/types";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
 
 const wordCountList = [10, 25, 50];
-const caretStyles: CaretStyle[] = ['default', 'block', 'underline']
 
 export default function Home() {
   const [wordCount, setWordCount] = useState<number>(wordCountList[1]);
   const [wordsList, setWordsList] = useState<string>(
     generate({ exactly: wordCount, join: " " })
   );
-  const {setPosition: setCaretPosition, style: caretStyle, setStyle: setCaretStyle} = useCaretStore();
+  const { setPosition: setCaretPosition } = useCaretStore();
 
   useEffect(() => {
     setWordsList(generate({ exactly: wordCount, join: " " }));
@@ -42,21 +41,8 @@ export default function Home() {
           </button>
         ))}
       </div>
-      <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit mb-10">
-        <label className="text-sub">Caret style:</label>
-        {caretStyles.map((style) => (
-          <button
-            key={style}
-            className={cn(
-              "text-base text-sub hover:text-text transition-colors duration-200 cursor-pointer font-medium",
-              caretStyle === style && "text-main"
-            )}
-            onClick={() => setCaretStyle(style)}
-          >
-            {style}
-          </button>
-        ))}
-      </div>
+
+      <SelectCaretStyle />
       <ListWords wordStr={wordsList} />
     </div>
   );

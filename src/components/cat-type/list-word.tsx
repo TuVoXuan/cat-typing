@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import Caret from "./caret";
 import Word from "./word";
 import useWordsStore from "@/store/useWords";
+import useCaretStore from "@/store/useCaret";
 
 interface ListWordsProps {
   wordStr: string;
@@ -9,6 +10,7 @@ interface ListWordsProps {
 
 export default function ListWords({ wordStr }: ListWordsProps) {
   const { setWords, words, setCurrentWord } = useWordsStore();
+  const {style: caretStyle} = useCaretStore();
 
   const isWordsCompleted = useMemo(() => {
     if (words.length === 0) return false;
@@ -32,7 +34,7 @@ export default function ListWords({ wordStr }: ListWordsProps) {
 
   return (
     <div id="word-list" className="flex flex-wrap max-w-[1200px] relative">
-      <Caret style="block"/>
+      <Caret style={caretStyle}/>
       {words.map((word, index) => (
         <Word key={`${word.word}-${index}`} word={word} index={index} />
       ))}

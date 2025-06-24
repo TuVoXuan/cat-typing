@@ -29,7 +29,11 @@ export default function Word({ word, index, className }: WordProps) {
     startedTyping,
     setStartedTyping,
   } = useWordsStore();
-  const {setPosition: setCaretPosition, setDimension: setCaretDimension, style: caretStyle} = useCaretStore();
+  const {
+    setPosition: setCaretPosition,
+    setDimension: setCaretDimension,
+    style: caretStyle,
+  } = useCaretStore();
   const [letters, setLetter] = useState<ILetter[]>([]);
   const [typedLetterId, setTypedLetterId] = useState<string>("");
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
@@ -50,6 +54,9 @@ export default function Word({ word, index, className }: WordProps) {
         isTyped: false,
       }))
     );
+    if (index === 0) {
+      setTypedLetterId(`${word.word}-${index}-${word.word[0]}-0`);
+    }
   }, [word]);
 
   useEffect(() => {
@@ -59,11 +66,8 @@ export default function Word({ word, index, className }: WordProps) {
   }, [letterPosition]);
 
   useEffect(() => {
-    if(caretStyle === "block") {
+    if (index === 0) {
       setCaretDimension(letterDimension);
-    }
-    else if (caretStyle === "default") {
-      setCaretDimension(null);
     }
   }, [letterDimension, caretStyle]);
 
@@ -289,7 +293,7 @@ export default function Word({ word, index, className }: WordProps) {
   }, [letters, word.word, keyTypedCountRef.current]);
 
   return (
-    <div className={cn("flex px-2", className)}>
+    <div className={cn("flex px-[9px]", className)}>
       {letters.map((letter, letterIndex) => (
         <Letter
           key={letterIndex}

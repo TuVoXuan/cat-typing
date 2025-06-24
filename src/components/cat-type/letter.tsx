@@ -22,7 +22,7 @@ export default function Letter({
       id={`${word}-${wordIndex}-${letter.letter}-${letterIndex}`}
       ref={letterRef}
       className={cn(
-        "inline-block px-[1px] text-sub text-[32px] pointer-events-none transition-colors duration-75 ease-linear",
+        "z-[1] inline-block px-[1px] text-sub text-[32px] pointer-events-none transition-colors duration-75 ease-linear",
         letter.isTyped === true &&
           letter.isCorrect === true &&
           "text-text",
