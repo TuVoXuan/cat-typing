@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils";
 import useCaretStore from "@/store/useCaret";
 import { CaretStyle } from "@/types";
 import { useMemo } from "react";
+import { motion } from "framer-motion";
+import useWordsStore from "@/store/useWords";
 
 interface ICaretProps {
   style: CaretStyle;
@@ -9,6 +11,7 @@ interface ICaretProps {
 
 export default function Caret({ style }: ICaretProps) {
   const { position, dimension } = useCaretStore();
+  const { startedTyping } = useWordsStore();
 
   const caretClassName = useMemo(() => {
     switch (style) {
@@ -53,13 +56,15 @@ export default function Caret({ style }: ICaretProps) {
   }, [position, dimension, style]);
 
   return (
-    <div
+    <motion.div
       className={cn(
-        "absolute rounded-full transition-all duration-200 ease-linear bg-caret z-0",
-        caretClassName
-        // !startedTyping && "animate-flicker"
+        "absolute rounded-full ease-linear bg-caret z-0",
+        caretClassName,
+        !startedTyping && "animate-caret"
       )}
-      style={caretStyles}
-    ></div>
+      animate={caretStyles}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      layout // This enables smooth className/layout transitions
+    />
   );
 }

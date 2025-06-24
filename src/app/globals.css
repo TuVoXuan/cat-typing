@@ -58,6 +58,19 @@
   --color-error-extra: var(--error-extra);
 }
 
+@theme {
+  --animate-caret: caret 1s infinite;
+  @keyframes caret {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -157,23 +170,7 @@
   --error-extra: #7e2a33;
 }
 
-@layer utilities {
-  @keyframes caret {
 
-    0%,
-    100% {
-      background-color: transparent;
-    }
-
-    50% {
-      background-color: var(--color-caret);
-    }
-  }
-
-  .animate-caret {
-    animation: caret 1s infinite;
-  }
-}
 
 @layer base {
   * {
@@ -186,45 +183,4 @@
 
 body {
   font-family: "Roboto Mono", monospace;
-}
-
-.custom-cursor {
-  position: fixed;
-  width: 16px;
-  height: 16px;
-  border-radius: 9999px;
-  box-shadow: 0 0 0 1px var(--color-foreground);
-  pointer-events: none;
-  transition-property: top, left, width, height, background-color;
-  transition-duration: 150ms;
-  transition-timing-function: ease-out;
-  z-index: 999;
-}
-
-.custom-cursor-hover {
-  height: 22px;
-  width: 22px;
-  box-shadow: 0 0 0 1.2px var(--color-foreground);
-}
-
-.bg-grid-linear {
-  background-color: var(--color-primary);
-  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.dark .bg-grid-linear {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-.bg-grid-dots {
-  background-color: var(--color-primary);
-  background-image:
-    radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.dark .bg-grid-dots {
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 }

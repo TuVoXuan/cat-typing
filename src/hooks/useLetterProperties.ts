@@ -18,7 +18,6 @@ const useLetterProperties = (
       if (!childId) return null;
       const parent = document.getElementById(parentId);
       const child = document.getElementById(childId);
-      console.log("child: ", child);
 
       if (parent && child) {
         const parentRect = parent.getBoundingClientRect();
