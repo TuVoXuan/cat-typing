@@ -1,8 +1,14 @@
 "use client";
 import ListWords from "@/components/cat-type/list-word";
 import SelectCaretStyle from "@/components/settings/select-caret-style";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import useCaretStore from "@/store/useCaret";
+import { RotateCw } from "lucide-react";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
 
@@ -22,6 +28,11 @@ export default function Home() {
 
   const handleWordCountChange = (count: number) => {
     setWordCount(count);
+  };
+
+  const handleRestartTest = () => {
+    setWordsList(generate({ exactly: wordCount, join: " " }));
+    setCaretPosition(null); // Reset cursor position when restarting the test
   };
 
   return (
@@ -44,6 +55,19 @@ export default function Home() {
 
       <SelectCaretStyle />
       <ListWords wordStr={wordsList} />
+
+      <div className="flex w-full justify-center mt-10">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={handleRestartTest} className="cursor-pointer">
+              <RotateCw className="size-5 text-sub hover:text-text" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="font-medium text-base">Restart Test</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import Caret from "./caret";
 import Word from "./word";
 import useWordsStore from "@/store/useWords";
 import useCaretStore from "@/store/useCaret";
+import { toast } from "sonner";
 
 interface ListWordsProps {
   wordStr: string;
@@ -28,7 +29,11 @@ export default function ListWords({ wordStr }: ListWordsProps) {
 
   useEffect(() => {
     if (isWordsCompleted) {
-      console.log("completed type string");
+      toast.success("Congratulations! You have completed the typing test.", {
+        position: "top-center",
+        duration: 5000,
+        icon: "🎉",
+      });
     }
   }, [isWordsCompleted]);
 
