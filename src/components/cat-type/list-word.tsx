@@ -33,6 +33,12 @@ export default function ListWords({ wordStr }: ListWordsProps) {
         position: "top-center",
         duration: 5000,
         icon: "🎉",
+        style: {
+          background: "var(--sub-alt)",
+          color: "var(--text)",
+          fontWeight: "600",
+          fontSize: "14px",
+        },
       });
     }
   }, [isWordsCompleted]);

@@ -72,7 +72,7 @@ function CaretStyleDemo({
     <button
       onClick={onClick ?? undefined}
       className={cn(
-        "group bg-sub-alt hover:bg-text w-10 h-6 rounded-[4px] flex items-end justify-center pb-1 transition-colors duration-200",
+        "group bg-sub-alt hover:bg-text w-10 h-6 rounded-[4px] flex items-end justify-center pb-1 transition-colors duration-200 cursor-pointer",
         isActive && "bg-main"
       )}
     >
@@ -90,7 +90,7 @@ export default function SelectCaretStyle() {
   const { style: caretStyle, setStyle: setCaretStyle } = useCaretStore();
 
   return (
-    <div className="dark flex items-center gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit mb-10">
+    <div className="dark flex items-center gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit">
       <label className="text-sub">Caret style:</label>
       {caretStyles.map((style) => (
         <CaretStyleDemo
