@@ -56,6 +56,8 @@
   --color-text: var(--text);
   --color-error: var(--error);
   --color-error-extra: var(--error-extra);
+
+  --font-lexend-deca: var(--font-lexend-deca);
 }
 
 @theme {
@@ -112,8 +114,8 @@
   --border: #e5e7eb;
   --accent: #3b82f6;
 
-  --main: #ebd621;
-  --caret: #ebd621;
+  --main: #e2b714;
+  --caret: #e2b714;
   --sub: #646669;
   --sub-alt: #2c2e31;
   --text: #d1d0c5;
@@ -160,7 +162,7 @@
   --muted: #d1d5db;
   --border: #374151;
 
-  --main: #ebd621;
+  --main: #e2b714;
   --accent: #60a5fa;
   --caret: #e2b714;
   --sub: #646669;
@@ -182,5 +184,5 @@
 }
 
 body {
-  font-family: "Roboto Mono", monospace;
+  font-family: var(--font-roboto-mono), monospace;
 }

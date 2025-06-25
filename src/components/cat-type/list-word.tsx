@@ -55,7 +55,10 @@ export default function ListWords({ wordStr }: ListWordsProps) {
   }, [setStartedTyping]);
 
   return (
-    <div id="word-list" className="flex flex-wrap max-w-[1200px] relative">
+    <div
+      id="word-list"
+      className="flex flex-wrap max-w-[1200px] relative mx-auto"
+    >
       <Caret style={caretStyle} />
       {words.map((word, index) => (
         <Word key={`${word.word}-${index}`} word={word} index={index} />

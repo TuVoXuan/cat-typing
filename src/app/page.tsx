@@ -1,5 +1,6 @@
 "use client";
 import ListWords from "@/components/cat-type/list-word";
+import Header from "@/components/header";
 import SelectCaretStyle from "@/components/settings/select-caret-style";
 import {
   Tooltip,
@@ -36,8 +37,9 @@ export default function Home() {
   };
 
   return (
-    <div className="dark bg-primary h-screen w-full items-center justify-center flex flex-col">
-      <div className="flex items-center gap-x-5 m-10">
+    <div className="dark bg-primary h-screen w-full py-8">
+      <Header />
+      <div className="flex items-center gap-x-5 m-10 w-fit mx-auto">
         <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit">
           <label className="text-sub">Word count:</label>
           {wordCountList.map((count) => (
