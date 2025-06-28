@@ -1,36 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⌨️ Typing Test Clone (Monkeytype Style)
 
-## Getting Started
+A clean and minimal typing test web app inspired by [Monkeytype](https://monkeytype.com).  
+This app helps you improve your typing speed and accuracy with real-time feedback.
 
-First, run the development server:
+![Typing Test Screenshot](https://res.cloudinary.com/cake-shop/image/upload/v1751077958/Screenshot_2025-06-28_at_09.29.51_xipemd.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- ✏️ **Caret Style Selection** – Choose your preferred caret style while typing.
+- 🔁 **Reset Typing Test** – Easily restart the test with one click.
+- 🟥 **Error Highlighting** – Highlights incorrect characters and words in real time.
+- ✅ **Correct Word Highlighting** – Visually distinguish correctly typed words.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **NextJS**
+- **Tailwind CSS** for styling
+- **React Hooks** and clean state management
