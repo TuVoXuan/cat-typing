@@ -26,3 +26,5 @@ export const alphabet = [
   "y",
   "z",
 ];
+export const leftHandKeys = ["a", "b", "c", "d", "e", "f", "g", "q", "r", "s", "t", "v", "w", "x", "z"];
+export const rightHandKeys = ["h", "i", "j", "k", "l", "m", "n", "o", "p", "u", "y", 'Backspace'];

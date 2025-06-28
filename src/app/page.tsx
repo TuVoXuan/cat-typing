@@ -1,4 +1,5 @@
 "use client";
+import CatTypeImage from "@/components/cat-type-image";
 import ListWords from "@/components/cat-type/list-word";
 import Header from "@/components/header";
 import SelectCaretStyle from "@/components/settings/select-caret-style";
@@ -72,6 +73,10 @@ export default function Home() {
             <p className="font-medium text-base">Restart Test</p>
           </TooltipContent>
         </Tooltip>
+      </div>
+
+      <div className="mt-5 mx-auto flex w-fit">
+        <CatTypeImage />
       </div>
 
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
