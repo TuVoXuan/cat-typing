@@ -6,6 +6,7 @@ import React, { useEffect } from "react";
 import catNotTyping from "../../assets/images/cat-not-typing.png";
 import catTypingLeftHand from "../../assets/images/cat-typing-left-hand.png";
 import catTypingRightHand from "../../assets/images/cat-typing-right-hand.png";
+import { cn } from "@/lib/utils";
 
 export default function CatTypeImage() {
   const { words } = useWordsStore();
@@ -18,6 +19,7 @@ export default function CatTypeImage() {
 
   function handleKeyDown(event: KeyboardEvent) {
     const key = event.key;
+    console.log("key: ", key);
     const isLeftHandKey = leftHandKeys.includes(key);
     const isRightHandKey = rightHandKeys.includes(key);
 
@@ -40,11 +42,8 @@ export default function CatTypeImage() {
   }
 
   useEffect(() => {
-    if (!words.every((word) => word.isTypedCorrectly)) {
-      //Need to update the condition of the when stop listening event keydown
-      document.addEventListener("keydown", handleKeyDown);
-      document.addEventListener("keyup", handleKeyUp);
-    }
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
@@ -53,30 +52,37 @@ export default function CatTypeImage() {
 
   return (
     <div className="relative w-[200px] h-auto">
-      {typingAction === "right" && (
-        <Image
-          src={catTypingRightHand.src}
-          alt="Cat typing with right hand"
-          height={catTypingRightHand.height}
-          width={catTypingRightHand.width}
-        />
-      )}
-      {typingAction === "left" && (
-        <Image
-          src={catTypingLeftHand.src}
-          alt="Cat typing with left hand"
-          height={catTypingLeftHand.height}
-          width={catTypingLeftHand.width}
-        />
-      )}
-      {typingAction === "none" && (
-        <Image
-          src={catNotTyping.src}
-          alt="Cat not typing"
-          height={catNotTyping.height}
-          width={catNotTyping.width}
-        />
-      )}
+      <Image
+        className={cn(
+          "absolute top-0 left-0",
+          typingAction === "right" ? "visible" : "invisible"
+        )}
+        src={catTypingRightHand.src}
+        alt="Cat typing with right hand"
+        height={catTypingRightHand.height}
+        width={catTypingRightHand.width}
+      />
+
+      <Image
+        className={cn(
+          "absolute top-0 left-0",
+          typingAction === "left" ? "visible" : "invisible"
+        )}
+        src={catTypingLeftHand.src}
+        alt="Cat typing with left hand"
+        height={catTypingLeftHand.height}
+        width={catTypingLeftHand.width}
+      />
+      <Image
+        className={cn(
+          "absolute top-0 left-0",
+          typingAction === "none" ? "visible" : "invisible"
+        )}
+        src={catNotTyping.src}
+        alt="Cat not typing"
+        height={catNotTyping.height}
+        width={catNotTyping.width}
+      />
     </div>
   );
 }
