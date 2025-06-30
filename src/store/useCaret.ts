@@ -2,7 +2,7 @@ import { CaretStyle, Dimension, Position } from "@/types";
 import { create } from "zustand";
 
 interface ICaretState {
-  position: Position| null;
+  position: Position | null;
   dimension: Dimension | null;
   style: CaretStyle;
   setPosition: (position: Position | null) => void;
@@ -12,7 +12,7 @@ interface ICaretState {
 
 const useCaretStore = create<ICaretState>()((set) => ({
   position: null,
-  style: 'default',
+  style: "default",
   dimension: null,
   setDimension: (dimension) => set({ dimension }),
   setPosition: (position) => set({ position }),

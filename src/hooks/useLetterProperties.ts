@@ -1,7 +1,6 @@
+import { ADJUSTMENT_TOP_PX } from "@/constants";
 import { Dimension, Position } from "@/types";
 import { useState, useEffect } from "react";
-
-const ADJUSTMENT_TOP_PX = 4;
 
 export type LetterProperties = [Position | null, Dimension | null];
 
@@ -11,7 +10,9 @@ const useLetterProperties = (
   horizontalPosition: "left" | "right"
 ): LetterProperties => {
   const [position, setPosition] = useState<Position | null>(null);
-  const [letterDimensions, setLetterDimensions] = useState<Dimension | null>(null);
+  const [letterDimensions, setLetterDimensions] = useState<Dimension | null>(
+    null
+  );
 
   useEffect(() => {
     const updatePosition = () => {

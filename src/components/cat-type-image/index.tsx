@@ -19,7 +19,6 @@ export default function CatTypeImage() {
 
   function handleKeyDown(event: KeyboardEvent) {
     const key = event.key;
-    console.log("key: ", key);
     const isLeftHandKey = leftHandKeys.includes(key);
     const isRightHandKey = rightHandKeys.includes(key);
 

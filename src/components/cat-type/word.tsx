@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ILetter } from "./type";
 import Letter from "./letter";
 import {
   EAppEvent,
   publishAppEvent,
   subscribeAppEvent,
 } from "@/utils/app-event";
-import useWordsStore, { IWord } from "@/store/useWords";
+import useWordsStore, { ICurrentWord, IWord } from "@/store/useWords";
 import { cn } from "@/lib/utils";
 import useLetterProperties from "@/hooks/useLetterProperties";
-import { alphabet } from "@/constants";
+import { ADJUSTMENT_TOP_PX, alphabet, LINE_HEIGHT_PX } from "@/constants";
 import useCaretStore from "@/store/useCaret";
+import getLetterProperties from "@/utils/get-letter-properties";
 
 interface WordProps {
   word: IWord;
@@ -28,18 +28,24 @@ export default function Word({ word, index, className }: WordProps) {
     setWords,
     startedTyping,
     setStartedTyping,
+    updateWord,
   } = useWordsStore();
+
   const {
+    position: caretPosition,
+    dimension: caretDimension,
     setPosition: setCaretPosition,
     setDimension: setCaretDimension,
     style: caretStyle,
   } = useCaretStore();
-  const [letters, setLetter] = useState<ILetter[]>([]);
+  // const [letters, setLetter] = useState<ILetter[]>([]);
+  const letters = word.letters;
   const [typedLetterId, setTypedLetterId] = useState<string>("");
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
     "left"
   );
   const keyTypedCountRef = useRef<number>(0);
+  // need to replace custom hook by using the utils function
   const [letterPosition, letterDimension] = useLetterProperties(
     typedLetterId,
     "word-list",
@@ -47,26 +53,87 @@ export default function Word({ word, index, className }: WordProps) {
   );
 
   useEffect(() => {
-    setLetter(
-      word.word.split("").map((letter) => ({
-        letter: letter,
-        isCorrect: null,
-        isTyped: false,
-      }))
-    );
-    if (index === 0) {
+    //need to update condition run this useEffect because when remove first typed line it also go the
+    // this useEffect so the caret position is not correct
+    if (index === 0 && !caretPosition) {
       setTypedLetterId(`${word.word}-${index}-${word.word[0]}-0`);
     }
-  }, [word]);
+  }, [word, caretPosition]);
 
   useEffect(() => {
     if (letterPosition) {
-      setCaretPosition(letterPosition);
+      let rowsWord = 0;
+      const wordListElement = document.getElementById("word-list");
+      if (wordListElement) {
+        const wordListHeight = wordListElement.scrollHeight;
+        const lineHeight = LINE_HEIGHT_PX;
+        const maxRows = Math.floor(wordListHeight / lineHeight);
+        rowsWord = maxRows;
+      }
+
+      if (
+        letterPosition &&
+        letterPosition.y === LINE_HEIGHT_PX * 2 + ADJUSTMENT_TOP_PX &&
+        rowsWord > 3
+      ) {
+        console.log("letterPosition: ", letterPosition);
+        console.log("words: ", words);
+        console.log("----------");
+        let firstWordInSecondRow: ICurrentWord | null = null;
+        for (let i = 0; i < words.length; i++) {
+          if (firstWordInSecondRow) break;
+
+          const word = words[i];
+          const wordLetters = word.word.split("");
+
+          for (let j = 0; j < wordLetters.length; j++) {
+            const letter = wordLetters[j];
+            const childId = `${word.word}-${word.index}-${letter}-${j}`;
+            const letterProperties = getLetterProperties(
+              childId,
+              "word-list",
+              "left"
+            );
+            if (letterProperties) {
+              if (
+                letterProperties.position.y ===
+                LINE_HEIGHT_PX + ADJUSTMENT_TOP_PX
+              ) {
+                firstWordInSecondRow = {
+                  word: word.word,
+                  index: word.index,
+                };
+                break;
+              }
+            }
+          }
+        }
+
+        if (firstWordInSecondRow) {
+          console.log("firstWordInSecondRow: ", firstWordInSecondRow);
+          setCaretPosition({
+            x: 9,
+            y: LINE_HEIGHT_PX + ADJUSTMENT_TOP_PX,
+          });
+          setWords(words.slice(firstWordInSecondRow.index));
+
+          firstWordInSecondRow = null;
+        }
+      } else {
+        setCaretPosition(letterPosition);
+      }
     }
-  }, [letterPosition]);
+  }, [
+    letterPosition,
+    currentWord,
+    caretPosition,
+    setCaretPosition,
+    words,
+    setWords,
+  ]);
 
   useEffect(() => {
-    if (index === 0) {
+    if (index === 0 && !caretDimension) {
       setCaretDimension(letterDimension);
     }
   }, [letterDimension, caretStyle]);
@@ -116,7 +183,7 @@ export default function Word({ word, index, className }: WordProps) {
         });
       } else {
         newLetters.pop();
-        setLetter(newLetters);
+        updateWord(index, newLetters);
         keyTypedCountRef.current--;
         handleUpdateTypedLetterIdAndCursorPosition({
           word: word.word,
@@ -138,7 +205,7 @@ export default function Word({ word, index, className }: WordProps) {
       } else {
         lastTypedLetter.isTyped = false;
         lastTypedLetter.isCorrect = null;
-        setLetter(newLetters);
+        updateWord(index, newLetters);
         keyTypedCountRef.current--;
 
         handleUpdateTypedLetterIdAndCursorPosition({
@@ -212,7 +279,7 @@ export default function Word({ word, index, className }: WordProps) {
             setWords(newWords);
           }
         }
-        setLetter(updatedLetters);
+        updateWord(index, updatedLetters);
         handleUpdateTypedLetterIdAndCursorPosition({
           word: word.word,
           wordIndex: index,
@@ -223,7 +290,7 @@ export default function Word({ word, index, className }: WordProps) {
       } else if (typedCount < maxLetters) {
         // Adding extra letters beyond the word length, up to maxLetters
         keyTypedCountRef.current++;
-        setLetter([
+        updateWord(index, [
           ...letters,
           {
             letter: event.key,
@@ -243,7 +310,9 @@ export default function Word({ word, index, className }: WordProps) {
     } else if (event.code === SPACE_KEY_CODE) {
       // it will check if the current word is the last word in the list
       // then turn to the next word if has
-
+      if (letters[0].isTyped === false) {
+        return;
+      }
       const newWords = [...words];
       newWords[index].isTypedCorrectly = isWordTypedCorrectly;
       setWords(newWords);

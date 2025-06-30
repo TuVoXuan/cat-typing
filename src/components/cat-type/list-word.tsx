@@ -21,7 +21,16 @@ export default function ListWords({ wordStr }: ListWordsProps) {
   useEffect(() => {
     if (wordStr.length > 0) {
       setWords(
-        wordStr.split(" ").map((word) => ({ word, isTypedCorrectly: false }))
+        wordStr.split(" ").map((word, index) => ({
+          index,
+          word,
+          isTypedCorrectly: false,
+          letters: word.split("").map((letter) => ({
+            letter: letter,
+            isCorrect: null,
+            isTyped: false,
+          })),
+        }))
       );
       setCurrentWord({ word: wordStr.split(" ")[0], index: 0 });
     }
@@ -57,11 +66,15 @@ export default function ListWords({ wordStr }: ListWordsProps) {
   return (
     <div
       id="word-list"
-      className="flex flex-wrap max-w-[1200px] relative mx-auto"
+      className="flex flex-wrap max-w-[1200px] relative mx-auto max-h-[144px] overflow-hidden"
     >
       <Caret style={caretStyle} />
-      {words.map((word, index) => (
-        <Word key={`${word.word}-${index}`} word={word} index={index} />
+      {words.map((word) => (
+        <Word
+          key={`${word.word}-${word.index}`}
+          word={word}
+          index={word.index}
+        />
       ))}
     </div>
   );
