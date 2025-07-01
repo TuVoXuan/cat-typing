@@ -33,11 +33,6 @@ export default function ListWords({ wordStr }: ListWordsProps) {
           index,
           word,
           isTypedCorrectly: false,
-          letters: word.split("").map((letter) => ({
-            letter: letter,
-            isCorrect: null,
-            isTyped: false,
-          })),
         }))
       );
       setCurrentWord({ word: wordStr.split(" ")[0], index: 0 });

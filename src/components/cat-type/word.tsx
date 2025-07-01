@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import useLetterProperties from "@/hooks/useLetterProperties";
 import { ADJUSTMENT_TOP_PX, alphabet, LINE_HEIGHT_PX } from "@/constants";
 import useCaretStore from "@/store/useCaret";
+import { ILetter } from "./type";
 
 interface WordProps {
   word: IWord;
@@ -27,7 +28,6 @@ export default function Word({ word, index, className }: WordProps) {
     setWords,
     startedTyping,
     setStartedTyping,
-    updateWord,
     hiddenRowsNum,
     addHiddenRowsNum,
   } = useWordsStore();
@@ -39,19 +39,27 @@ export default function Word({ word, index, className }: WordProps) {
     setDimension: setCaretDimension,
     style: caretStyle,
   } = useCaretStore();
-  const letters = word.letters;
+  const [letters, setLetters] = useState<ILetter[]>([]);
   const [typedLetterId, setTypedLetterId] = useState<string>("");
-  console.log("typedLetterId: ", typedLetterId);
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
     "left"
   );
   const keyTypedCountRef = useRef<number>(0);
-  // need to replace custom hook by using the utils function
   const [letterPosition, letterDimension] = useLetterProperties(
     typedLetterId,
     "word-list",
     cursorPosition
   );
+
+  useEffect(() => {
+    setLetters(
+      word.word.split("").map((letter) => ({
+        letter: letter,
+        isCorrect: null,
+        isTyped: false,
+      }))
+    );
+  }, [word]);
 
   useEffect(() => {
     if (index === 0 && !caretPosition) {
@@ -133,7 +141,7 @@ export default function Word({ word, index, className }: WordProps) {
         });
       } else {
         newLetters.pop();
-        updateWord(index, newLetters);
+        setLetters(newLetters);
         keyTypedCountRef.current--;
         handleUpdateTypedLetterIdAndCursorPosition({
           word: word.word,
@@ -155,7 +163,7 @@ export default function Word({ word, index, className }: WordProps) {
       } else {
         lastTypedLetter.isTyped = false;
         lastTypedLetter.isCorrect = null;
-        updateWord(index, newLetters);
+        setLetters(newLetters);
         keyTypedCountRef.current--;
 
         handleUpdateTypedLetterIdAndCursorPosition({
@@ -229,7 +237,7 @@ export default function Word({ word, index, className }: WordProps) {
             setWords(newWords);
           }
         }
-        updateWord(index, updatedLetters);
+        setLetters(updatedLetters);
         handleUpdateTypedLetterIdAndCursorPosition({
           word: word.word,
           wordIndex: index,
@@ -240,7 +248,7 @@ export default function Word({ word, index, className }: WordProps) {
       } else if (typedCount < maxLetters) {
         // Adding extra letters beyond the word length, up to maxLetters
         keyTypedCountRef.current++;
-        updateWord(index, [
+        setLetters([
           ...letters,
           {
             letter: event.key,
