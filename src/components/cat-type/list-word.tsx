@@ -11,8 +11,14 @@ interface ListWordsProps {
 }
 
 export default function ListWords({ wordStr }: ListWordsProps) {
-  const { setWords, words, setCurrentWord, setStartedTyping, hiddenRowsNum } =
-    useWordsStore();
+  const {
+    setWords,
+    words,
+    setCurrentWord,
+    startedTyping,
+    setStartedTyping,
+    hiddenRowsNum,
+  } = useWordsStore();
   const { style: caretStyle } = useCaretStore();
 
   const isWordsCompleted = useMemo(() => {
@@ -56,14 +62,14 @@ export default function ListWords({ wordStr }: ListWordsProps) {
 
   useEffect(() => {
     const handleMouseMove = () => {
-      setStartedTyping(false);
+      if (startedTyping) setStartedTyping(false);
     };
     document.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [setStartedTyping]);
+  }, [startedTyping, setStartedTyping]);
 
   return (
     <div className="flex flex-wrap max-w-[1200px] relative mx-auto h-[144px] overflow-hidden">
