@@ -4,13 +4,15 @@ import Word from "./word";
 import useWordsStore from "@/store/useWords";
 import useCaretStore from "@/store/useCaret";
 import { toast } from "sonner";
+import { LINE_HEIGHT_PX } from "@/constants";
 
 interface ListWordsProps {
   wordStr: string;
 }
 
 export default function ListWords({ wordStr }: ListWordsProps) {
-  const { setWords, words, setCurrentWord, setStartedTyping } = useWordsStore();
+  const { setWords, words, setCurrentWord, setStartedTyping, hiddenRowsNum } =
+    useWordsStore();
   const { style: caretStyle } = useCaretStore();
 
   const isWordsCompleted = useMemo(() => {
@@ -64,18 +66,23 @@ export default function ListWords({ wordStr }: ListWordsProps) {
   }, [setStartedTyping]);
 
   return (
-    <div
-      id="word-list"
-      className="flex flex-wrap max-w-[1200px] relative mx-auto max-h-[144px] overflow-hidden"
-    >
-      <Caret style={caretStyle} />
-      {words.map((word) => (
-        <Word
-          key={`${word.word}-${word.index}`}
-          word={word}
-          index={word.index}
-        />
-      ))}
+    <div className="flex flex-wrap max-w-[1200px] relative mx-auto h-[144px] overflow-hidden">
+      <div
+        id="word-list"
+        className="relative w-full h-full flex flex-wrap"
+        style={{
+          top: -(hiddenRowsNum * LINE_HEIGHT_PX),
+        }}
+      >
+        <Caret style={caretStyle} />
+        {words.map((word) => (
+          <Word
+            key={`${word.word}-${word.index}`}
+            word={word}
+            index={word.index}
+          />
+        ))}
+      </div>
     </div>
   );
 }

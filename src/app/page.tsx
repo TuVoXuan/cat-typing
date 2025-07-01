@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import useCaretStore from "@/store/useCaret";
+import useWordsStore from "@/store/useWords";
 import { CodeXml, RotateCw } from "lucide-react";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
@@ -17,17 +18,18 @@ import { useEffect, useState } from "react";
 const wordCountList = [10, 25, 50];
 
 export default function Home() {
-  const [wordCount, setWordCount] = useState<number>(wordCountList[2]);
+  const [wordCount, setWordCount] = useState<number>(wordCountList[1]);
   const [wordsList, setWordsList] = useState<string>(
-    // generate({ exactly: wordCount, join: " " })
-    "flimsy rocket lemon candle drift echo jungle stripe velvet hammer whisper tulip gravel sunset elbow kitten bucket zigzag puzzle orbit lantern sponge frost mitten tumble lantern dragon fossil peanut cradle velvet melon biscuit stumble lantern sprinkle mango orbit shovel blinky wobble"
+    generate({ exactly: wordCount, join: " " })
   );
   const { setPosition: setCaretPosition } = useCaretStore();
+  const { resetHiddenRowsNum } = useWordsStore();
 
-  // useEffect(() => {
-  //   setWordsList(generate({ exactly: wordCount, join: " " }));
-  //   setCaretPosition(null); // Reset cursor position when word count changes
-  // }, [wordCount]);
+  useEffect(() => {
+    setWordsList(generate({ exactly: wordCount, join: " " }));
+    setCaretPosition(null); // Reset cursor position when word count changes
+    resetHiddenRowsNum();
+  }, [wordCount]);
 
   const handleWordCountChange = (count: number) => {
     setWordCount(count);
@@ -36,6 +38,7 @@ export default function Home() {
   const handleRestartTest = () => {
     setWordsList(generate({ exactly: wordCount, join: " " }));
     setCaretPosition(null); // Reset cursor position when restarting the test
+    resetHiddenRowsNum();
   };
 
   return (

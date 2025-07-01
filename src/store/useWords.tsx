@@ -26,6 +26,9 @@ interface WordsState {
   setCurrentWord: (currWord: ICurrentWord) => void;
   startedTyping: boolean;
   setStartedTyping: (started: boolean) => void;
+  hiddenRowsNum: number;
+  addHiddenRowsNum: () => void;
+  resetHiddenRowsNum: () => void;
 }
 
 const useWordsStore = create<WordsState>()((set, get) => ({
@@ -42,6 +45,12 @@ const useWordsStore = create<WordsState>()((set, get) => ({
   setCurrentWord: (currWord) => set({ currentWord: currWord }),
   startedTyping: false,
   setStartedTyping: (started) => set({ startedTyping: started }),
+  hiddenRowsNum: 0,
+  addHiddenRowsNum: () => {
+    const currHiddenRowsNum = get().hiddenRowsNum;
+    set({ hiddenRowsNum: currHiddenRowsNum + 1 });
+  },
+  resetHiddenRowsNum: () => set({ hiddenRowsNum: 0 }),
 }));
 
 export default useWordsStore;

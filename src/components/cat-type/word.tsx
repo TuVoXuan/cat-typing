@@ -5,12 +5,11 @@ import {
   publishAppEvent,
   subscribeAppEvent,
 } from "@/utils/app-event";
-import useWordsStore, { ICurrentWord, IWord } from "@/store/useWords";
+import useWordsStore, { IWord } from "@/store/useWords";
 import { cn } from "@/lib/utils";
 import useLetterProperties from "@/hooks/useLetterProperties";
 import { ADJUSTMENT_TOP_PX, alphabet, LINE_HEIGHT_PX } from "@/constants";
 import useCaretStore from "@/store/useCaret";
-import getLetterProperties from "@/utils/get-letter-properties";
 
 interface WordProps {
   word: IWord;
@@ -29,6 +28,8 @@ export default function Word({ word, index, className }: WordProps) {
     startedTyping,
     setStartedTyping,
     updateWord,
+    hiddenRowsNum,
+    addHiddenRowsNum,
   } = useWordsStore();
 
   const {
@@ -38,9 +39,9 @@ export default function Word({ word, index, className }: WordProps) {
     setDimension: setCaretDimension,
     style: caretStyle,
   } = useCaretStore();
-  // const [letters, setLetter] = useState<ILetter[]>([]);
   const letters = word.letters;
   const [typedLetterId, setTypedLetterId] = useState<string>("");
+  console.log("typedLetterId: ", typedLetterId);
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
     "left"
   );
@@ -53,8 +54,6 @@ export default function Word({ word, index, className }: WordProps) {
   );
 
   useEffect(() => {
-    //need to update condition run this useEffect because when remove first typed line it also go the
-    // this useEffect so the caret position is not correct
     if (index === 0 && !caretPosition) {
       setTypedLetterId(`${word.word}-${index}-${word.word[0]}-0`);
     }
@@ -72,65 +71,16 @@ export default function Word({ word, index, className }: WordProps) {
       }
 
       if (
-        letterPosition &&
-        letterPosition.y === LINE_HEIGHT_PX * 2 + ADJUSTMENT_TOP_PX &&
-        rowsWord > 3
+        letterPosition.x === 9 &&
+        letterPosition.y >= LINE_HEIGHT_PX * 2 + ADJUSTMENT_TOP_PX &&
+        rowsWord > 3 &&
+        hiddenRowsNum < rowsWord - 3
       ) {
-        console.log("letterPosition: ", letterPosition);
-        console.log("words: ", words);
-        console.log("----------");
-        let firstWordInSecondRow: ICurrentWord | null = null;
-        for (let i = 0; i < words.length; i++) {
-          if (firstWordInSecondRow) break;
-
-          const word = words[i];
-          const wordLetters = word.word.split("");
-
-          for (let j = 0; j < wordLetters.length; j++) {
-            const letter = wordLetters[j];
-            const childId = `${word.word}-${word.index}-${letter}-${j}`;
-            const letterProperties = getLetterProperties(
-              childId,
-              "word-list",
-              "left"
-            );
-            if (letterProperties) {
-              if (
-                letterProperties.position.y ===
-                LINE_HEIGHT_PX + ADJUSTMENT_TOP_PX
-              ) {
-                firstWordInSecondRow = {
-                  word: word.word,
-                  index: word.index,
-                };
-                break;
-              }
-            }
-          }
-        }
-
-        if (firstWordInSecondRow) {
-          console.log("firstWordInSecondRow: ", firstWordInSecondRow);
-          setCaretPosition({
-            x: 9,
-            y: LINE_HEIGHT_PX + ADJUSTMENT_TOP_PX,
-          });
-          setWords(words.slice(firstWordInSecondRow.index));
-
-          firstWordInSecondRow = null;
-        }
-      } else {
-        setCaretPosition(letterPosition);
+        addHiddenRowsNum();
       }
+      setCaretPosition(letterPosition);
     }
-  }, [
-    letterPosition,
-    currentWord,
-    caretPosition,
-    setCaretPosition,
-    words,
-    setWords,
-  ]);
+  }, [letterPosition, setCaretPosition, addHiddenRowsNum, hiddenRowsNum]);
 
   useEffect(() => {
     if (index === 0 && !caretDimension) {
@@ -316,6 +266,8 @@ export default function Word({ word, index, className }: WordProps) {
       const newWords = [...words];
       newWords[index].isTypedCorrectly = isWordTypedCorrectly;
       setWords(newWords);
+      if (index + 1 >= newWords.length) return;
+
       setCurrentWord({
         word: newWords[index + 1].word,
         index: index + 1,
