@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import useCaretStore from "@/store/useCaret";
 import useWordsStore from "@/store/useWords";
 import { CodeXml, RotateCw } from "lucide-react";
-import Head from "next/head";
 import { generate } from "random-words";
 import { useEffect, useState } from "react";
 
@@ -43,83 +42,57 @@ export default function Home() {
   };
 
   return (
-    <>
-      <Head>
-        <title>Cat Typing</title>
-        <meta property="og:title" content="Cat Typing" />
-        <meta
-          property="og:description"
-          content="The website help practice typing."
-        />
-        <meta
-          property="og:image"
-          content="https://cat-typing.vercel.app/SEO/screenshot.png"
-        />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Cat Typing" />
-        <meta
-          name="twitter:description"
-          content="The website help practice typing."
-        />
-        <meta
-          name="twitter:image"
-          content="https://cat-typing.vercel.app/SEO/screenshot.png"
-        />
-      </Head>
-      <div className="dark bg-primary h-screen w-full py-8">
-        <Header />
-        <div className="flex items-center gap-x-5 m-10 w-fit mx-auto">
-          <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit">
-            <label className="text-sub">Word count:</label>
-            {wordCountList.map((count) => (
-              <button
-                key={count}
-                className={cn(
-                  "text-base text-sub hover:text-text transition-colors duration-200 cursor-pointer font-medium",
-                  count === wordCount && "text-main"
-                )}
-                onClick={() => handleWordCountChange(count)}
-              >
-                {count}
-              </button>
-            ))}
-          </div>
-
-          <SelectCaretStyle />
+    <div className="dark bg-primary h-screen w-full py-8">
+      <Header />
+      <div className="flex items-center gap-x-5 m-10 w-fit mx-auto">
+        <div className="dark flex gap-x-4 rounded-md bg-sub-alt text-foreground p-4 w-fit">
+          <label className="text-sub">Word count:</label>
+          {wordCountList.map((count) => (
+            <button
+              key={count}
+              className={cn(
+                "text-base text-sub hover:text-text transition-colors duration-200 cursor-pointer font-medium",
+                count === wordCount && "text-main"
+              )}
+              onClick={() => handleWordCountChange(count)}
+            >
+              {count}
+            </button>
+          ))}
         </div>
 
-        <ListWords wordStr={wordsList} />
-
-        <div className="flex w-full justify-center mt-4">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button onClick={handleRestartTest} className="cursor-pointer">
-                <RotateCw className="size-5 text-sub hover:text-text" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="font-medium text-base">Restart Test</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
-
-        <div className="mt-5 mx-auto flex w-fit">
-          <CatTypeImage />
-        </div>
-
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
-          <a
-            target="blank"
-            href="https://github.com/TuVoXuan/cat-typing"
-            className="flex items-center gap-2 text-sub hover:text-text"
-          >
-            <CodeXml className="size-5 stroke-2" />
-            <span className="font-medium text-sm">github</span>
-          </a>
-        </div>
+        <SelectCaretStyle />
       </div>
-    </>
+
+      <ListWords wordStr={wordsList} />
+
+      <div className="flex w-full justify-center mt-4">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button onClick={handleRestartTest} className="cursor-pointer">
+              <RotateCw className="size-5 text-sub hover:text-text" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="font-medium text-base">Restart Test</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+
+      <div className="mt-5 mx-auto flex w-fit">
+        <CatTypeImage />
+      </div>
+
+      <div className="fixed bottom-10 left-1/2 -translate-x-1/2">
+        <a
+          target="blank"
+          href="https://github.com/TuVoXuan/cat-typing"
+          className="flex items-center gap-2 text-sub hover:text-text"
+        >
+          <CodeXml className="size-5 stroke-2" />
+          <span className="font-medium text-sm">github</span>
+        </a>
+      </div>
+    </div>
   );
 }
