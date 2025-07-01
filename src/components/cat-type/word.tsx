@@ -65,7 +65,7 @@ export default function Word({ word, index, className }: WordProps) {
     if (index === 0 && !caretPosition) {
       setTypedLetterId(`${word.word}-${index}-${word.word[0]}-0`);
     }
-  }, [word, caretPosition]);
+  }, [caretPosition]);
 
   useEffect(() => {
     if (letterPosition) {
@@ -88,7 +88,7 @@ export default function Word({ word, index, className }: WordProps) {
       }
       setCaretPosition(letterPosition);
     }
-  }, [letterPosition, setCaretPosition, addHiddenRowsNum, hiddenRowsNum]);
+  }, [letterPosition]);
 
   useEffect(() => {
     if (index === 0 && !caretDimension) {
