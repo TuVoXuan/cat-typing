@@ -44,6 +44,7 @@ export default function Word({ word, index, className }: WordProps) {
   const [cursorPosition, setCursorPosition] = useState<"left" | "right">(
     "left"
   );
+  const [isWordCorrect, setIsWordCorrect] = useState<boolean>(true);
   const keyTypedCountRef = useRef<number>(0);
   const [letterPosition, letterDimension] = useLetterProperties(
     typedLetterId,
@@ -80,6 +81,7 @@ export default function Word({ word, index, className }: WordProps) {
 
       if (
         letterPosition.x === 9 &&
+        //need to change the way check letter position because when user zoom out it may not 9.
         letterPosition.y >= LINE_HEIGHT_PX * 2 + ADJUSTMENT_TOP_PX &&
         rowsWord > 3 &&
         hiddenRowsNum < rowsWord - 3
@@ -288,6 +290,10 @@ export default function Word({ word, index, className }: WordProps) {
         letterIndex: 0,
         cursorPosition: "left",
       });
+
+      setIsWordCorrect(
+        isWordTypedCorrectly && word.index === currentWord.index
+      );
     } else if (event.key === "Backspace") {
       // it will delete the last typed letter if the typed count is equal to 0 then back to previous word
       // if previous word is not typed correctly then it will delete the last typed letter
@@ -306,6 +312,12 @@ export default function Word({ word, index, className }: WordProps) {
   }, [currentWord, letters, words]);
 
   useEffect(() => {
+    if (word.index === currentWord?.index) {
+      setIsWordCorrect(true);
+    }
+  }, [currentWord]);
+
+  useEffect(() => {
     const listenerChangeCurrentWord = subscribeAppEvent({
       event: EAppEvent.CHANGE_CURRENT_WORD,
       listener: (event) => {
@@ -322,7 +334,10 @@ export default function Word({ word, index, className }: WordProps) {
   }, [letters, word.word, keyTypedCountRef.current]);
 
   return (
-    <div className={cn("flex px-[9px]", className)}>
+    <div className={cn("relative flex px-[9px]", className)}>
+      {!isWordCorrect && (
+        <div className="absolute bottom-[-3px] left-[9px] h-[3px] w-[calc(100%-18px)] rounded-full bg-error"></div>
+      )}
       {letters.map((letter, letterIndex) => (
         <Letter
           key={letterIndex}
